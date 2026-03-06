@@ -59,7 +59,23 @@ const G = () => (
     .glitch-wrap::after{color:var(--a2);animation:glitch2 6s infinite 1s;opacity:.8}
     .shimmer-text{background:linear-gradient(90deg,var(--ink) 0%,var(--a) 30%,var(--a2) 50%,var(--a) 70%,var(--ink) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite}
     .noise::before{content:'';position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:.018;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:150px}
-    .scanline{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(transparent,rgba(232,200,74,.02),transparent);animation:scanline 14s linear infinite;pointer-events:none;z-index:9996}
+    @media(max-width:768px){
+      body{cursor:auto}
+      .hide-mobile{display:none!important}
+      .nav-grid{grid-template-columns:1fr auto!important;padding:.7rem 1.2rem!important}
+      .nav-left,.nav-right{display:none!important}
+      .hero-grid{grid-template-columns:1fr!important;gap:2rem!important}
+      .stats-grid{grid-template-columns:1fr 1fr!important}
+      .about-grid{grid-template-columns:1fr!important;gap:2rem!important}
+      .skills-grid{grid-template-columns:1fr!important;gap:2rem!important}
+      .certs-grid{grid-template-columns:1fr!important}
+      .contact-grid{grid-template-columns:1fr!important;gap:2rem!important}
+      .footer-grid{grid-template-columns:1fr!important;gap:1rem!important;text-align:center}
+      .contact-border{border-left:none!important;padding-left:0!important;border-top:1px solid var(--r2);padding-top:2rem!important}
+      section{padding:4rem 1.2rem!important}
+      .awards-row{grid-template-columns:2rem 2rem 1fr!important;font-size:.85rem}
+      .fact-grid{grid-template-columns:1fr 1fr!important}
+    }
   `}</style>
 );
 
@@ -160,8 +176,8 @@ const Nav = ({ light, setLight }) => {
           </motion.button>
         </div>
       </div>
-      <div style={{padding:'.8rem 2.5rem',display:'grid',gridTemplateColumns:'1fr auto 1fr',alignItems:'center',maxWidth:1280,margin:'0 auto'}}>
-        <div style={{display:'flex',gap:'2.5rem'}}>
+      <div className="nav-grid" style={{padding:'.8rem 2.5rem',display:'grid',gridTemplateColumns:'1fr auto 1fr',alignItems:'center',maxWidth:1280,margin:'0 auto'}}>
+        <div className="nav-left" style={{display:'flex',gap:'2.5rem'}}>
           {['work','about','skills'].map(n=>(
             <motion.span key={n} data-h onClick={()=>go(n)} whileHover={{color:'var(--a)'}}
               style={{fontSize:'.75rem',fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--mut)',transition:'color .2s',cursor:'pointer'}}>{n}</motion.span>
@@ -171,7 +187,7 @@ const Nav = ({ light, setLight }) => {
           style={{cursor:'pointer',fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:'2rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:'#e8c84a',transition:'letter-spacing 0.3s ease'}}>
           K<span style={{fontStyle:'italic'}}>D</span>S
         </motion.span>
-        <div style={{display:'flex',gap:'2.5rem',justifyContent:'flex-end'}}>
+        <div className="nav-right" style={{display:'flex',gap:'2.5rem',justifyContent:'flex-end'}}>
           {['awards','contact'].map(n=>(
             <motion.span key={n} data-h onClick={()=>go(n)} whileHover={{color:'var(--a)'}}
               style={{fontSize:'.75rem',fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--mut)',transition:'color .2s',cursor:'pointer'}}>{n}</motion.span>
@@ -271,6 +287,7 @@ const Hero = () => {
 
         {/* Body grid */}
         <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.5,duration:.7}}
+          className="hero-grid"
           style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'4rem',borderTop:'1px solid var(--r2)',paddingTop:'2rem',marginBottom:'3rem'}}>
           <p className="cg" style={{fontSize:'clamp(.95rem,1.5vw,1.25rem)',fontStyle:'italic',lineHeight:1.75,color:'var(--ink2)'}}>
             Kevin DS is a Chennai-based AI & Data Science engineer who believes the sharpest technical mind must also hold a designer's eye.
@@ -295,6 +312,7 @@ const Hero = () => {
 
         {/* Stats */}
         <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.6,duration:.7}}
+          className="stats-grid"
           style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',borderTop:'1px solid var(--r2)',borderBottom:'1px solid var(--r2)'}}>
           {[['4+','Projects Shipped'],['8','Certifications'],['5+','Awards'],['2026','Graduating']].map(([n,l],i)=>(
             <motion.div key={i} whileHover={{background:'var(--s2)'}}
@@ -411,7 +429,7 @@ const About = () => {
     <section id="about" ref={ref} style={{background:'var(--s1)',borderTop:'1px solid var(--r2)',borderBottom:'1px solid var(--r2)',position:'relative',overflow:'hidden'}}>
       <div style={{maxWidth:1280,margin:'0 auto',padding:'7rem 2.5rem',position:'relative',zIndex:1}}>
         <SH title="The Hybrid" italic="Engineer."/>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'6rem',alignItems:'start'}}>
+        <div className="about-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'6rem',alignItems:'start'}}>
           <div>
             <p className="cg" style={{fontSize:'clamp(1rem,1.6vw,1.3rem)',fontStyle:'italic',lineHeight:1.75,color:'var(--ink2)',marginBottom:'1.4rem'}}>
               Kevin approaches technology with a hybrid mindset — combining analytical problem solving with a strong aesthetic philosophy.
@@ -437,7 +455,7 @@ const About = () => {
                 <span className="mono" style={{fontSize:'.56rem',letterSpacing:'.1em',color:'var(--a)',background:'rgba(232,200,74,.1)',border:'1px solid rgba(232,200,74,.25)',padding:'.2rem .6rem'}}>2022 – 2026 · Final Year</span>
               </div>
             </motion.div>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1px',background:'var(--r2)'}}>
+            <div className="certs-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1px',background:'var(--r2)'}}>
               {[['🏆','IConIC 2025','Paper Presentation'],['🎨','INTELLICONZ\'24','Design Award'],['☁️','Oracle Certified','Cloud & AI'],['📍','Remote-Friendly','Open to Offers']].map(([e,t,s],i)=>(
                 <motion.div key={i} whileHover={{background:'var(--s3)'}}
                   style={{background:'var(--s2)',padding:'1.2rem',transition:'background .2s',border:'1px solid var(--r2)',animation:`borderGlow ${4+i}s ease-in-out infinite ${i*.6}s`}}>
@@ -675,7 +693,7 @@ const Contact = () => {
       <div className="cg" style={{position:'absolute',bottom:'-2rem',right:'-1rem',fontSize:'clamp(5rem,16vw,13rem)',fontWeight:700,fontStyle:'italic',color:'var(--r)',userSelect:'none',pointerEvents:'none',letterSpacing:'-.04em'}}>HELLO</div>
       <div style={{maxWidth:1280,margin:'0 auto',position:'relative',zIndex:1}}>
         <SH title="The Contact" italic="Desk." meta="Pull up a chair."/>
-        <div style={{display:'grid',gridTemplateColumns:'1.3fr 1fr',gap:'6rem'}}>
+        <div className="contact-grid" style={{display:'grid',gridTemplateColumns:'1.3fr 1fr',gap:'6rem'}}>
           <div>
             <div className="mono" style={{fontSize:'.54rem',letterSpacing:'.16em',textTransform:'uppercase',color:'var(--mut)',marginBottom:'.8rem',borderBottom:'1px solid var(--r)',paddingBottom:'.5rem'}}>Drop a Note</div>
             <input value={name} onChange={e=>setName(e.target.value)}
@@ -740,7 +758,7 @@ const Contact = () => {
 const Footer = () => (
   <footer style={{borderTop:'3px solid var(--r2)',background:'var(--bg)'}}>
     <Ticker reverse items={TOOLS} speed={28}/>
-    <div style={{maxWidth:1280,margin:'0 auto',padding:'1.6rem 2.5rem',display:'grid',gridTemplateColumns:'1fr auto 1fr',alignItems:'center'}}>
+    <div className="footer-grid" style={{maxWidth:1280,margin:'0 auto',padding:'1.6rem 2.5rem',display:'grid',gridTemplateColumns:'1fr auto 1fr',alignItems:'center'}}>
       <span className="mono" style={{fontSize:'.52rem',letterSpacing:'.12em',textTransform:'uppercase',color:'var(--mut)'}}>© 2025 Kevin DS · Built with React & Framer Motion</span>
       <motion.span onClick={()=>document.getElementById('home')?.scrollIntoView({behavior:'smooth'})} whileHover={{letterSpacing:'0.18em'}} data-h
         style={{cursor:'pointer',fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:'1.8rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:'#e8c84a',textAlign:'center',transition:'letter-spacing 0.3s ease'}}>
