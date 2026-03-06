@@ -299,13 +299,13 @@ const Hero = () => {
 
         {/* Kicker */}
         <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.2,duration:.7}}
-          style={{display:'flex',alignItems:'center',gap:'1rem',marginBottom:'2rem',borderTop:'2px solid var(--r2)',paddingTop:'1rem'}}>
-          <span style={{background:'var(--a)',color:'#000',fontFamily:"'DM Mono'",fontSize:'.56rem',letterSpacing:'.2em',padding:'.2rem .7rem',textTransform:'uppercase',fontWeight:600}}>✦ Featured</span>
-          <span className="mono" style={{fontSize:'.56rem',letterSpacing:'.12em',color:'var(--mut)'}}>
+          style={{display:'flex',alignItems:'center',gap:'1rem',marginBottom:'2rem',borderTop:'2px solid var(--r2)',paddingTop:'1rem',flexWrap:'nowrap',overflow:'hidden'}}>
+          <span style={{background:'var(--a)',color:'#000',fontFamily:"'DM Mono'",fontSize:'.56rem',letterSpacing:'.2em',padding:'.2rem .7rem',textTransform:'uppercase',fontWeight:600,flexShrink:0}}>✦ Featured</span>
+          <span className="mono" style={{fontSize:'.56rem',letterSpacing:'.12em',color:'var(--mut)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',display:'flex',alignItems:'center',gap:'.3rem'}}>
             Specialising in —{' '}
             <AnimatePresence mode="wait">
               <motion.span key={roleIdx} initial={{y:12,opacity:0}} animate={{y:0,opacity:1}} exit={{y:-12,opacity:0}} transition={{duration:.35}}
-                style={{color:'var(--a)',textTransform:'uppercase',letterSpacing:'.14em'}}>{ROLES[roleIdx]}</motion.span>
+                style={{color:'var(--a)',textTransform:'uppercase',letterSpacing:'.14em',whiteSpace:'nowrap'}}>{ROLES[roleIdx]}</motion.span>
             </AnimatePresence>
           </span>
         </motion.div>
