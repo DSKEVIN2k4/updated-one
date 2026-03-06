@@ -62,7 +62,8 @@ const G = () => (
     @media(max-width:768px){
       body{cursor:auto}
       .hide-mobile{display:none!important}
-      .nav-grid{grid-template-columns:1fr auto!important;padding:.7rem 1.2rem!important}
+      .mobile-bar{display:flex!important}
+      .nav-grid{grid-template-columns:auto auto!important;justify-content:space-between;padding:.6rem 1.2rem!important}
       .nav-left,.nav-right{display:none!important}
       .hero-grid{grid-template-columns:1fr!important;gap:2rem!important}
       .stats-grid{grid-template-columns:1fr 1fr!important}
@@ -70,10 +71,11 @@ const G = () => (
       .skills-grid{grid-template-columns:1fr!important;gap:2rem!important}
       .certs-grid{grid-template-columns:1fr!important}
       .contact-grid{grid-template-columns:1fr!important;gap:2rem!important}
-      .footer-grid{grid-template-columns:1fr!important;gap:1rem!important;text-align:center}
       .contact-border{border-left:none!important;padding-left:0!important;border-top:1px solid var(--r2);padding-top:2rem!important}
+      .footer-grid{grid-template-columns:1fr!important;gap:1rem!important;text-align:center;justify-items:center}
+      .badge-wrap{display:none!important}
       section{padding:4rem 1.2rem!important}
-      .awards-row{grid-template-columns:2rem 2rem 1fr!important;font-size:.85rem}
+      .awards-row{grid-template-columns:2rem 2rem 1fr!important}
       .fact-grid{grid-template-columns:1fr 1fr!important}
     }
   `}</style>
@@ -165,7 +167,7 @@ const Nav = ({ light, setLight }) => {
   return (
     <motion.nav initial={{y:-80,opacity:0}} animate={{y:0,opacity:1}} transition={{delay:.1,duration:.7,ease:[.22,1,.36,1]}}
       style={{position:'fixed',top:0,left:0,right:0,zIndex:1000,background:scrolled?'rgba(8,7,10,0.92)':'transparent',backdropFilter:scrolled?'blur(20px)':'none',borderBottom:scrolled?'1px solid var(--r2)':'1px solid transparent',transition:'all .4s'}}>
-      <div style={{borderBottom:'1px solid var(--r)',padding:'.35rem 2.5rem',display:'flex',justifyContent:'space-between',maxWidth:1280,margin:'0 auto'}}>
+      <div className="hide-mobile" style={{borderBottom:'1px solid var(--r)',padding:'.35rem 2.5rem',display:'flex',justifyContent:'space-between',maxWidth:1280,margin:'0 auto'}}>
         <span className="mono" style={{fontSize:'.55rem',letterSpacing:'.2em',color:'var(--ink2)',textTransform:'uppercase'}}>Issue No. 01 · AI & DS Engineer · UI/UX Designer</span>
         <div style={{display:'flex',gap:'1.5rem',alignItems:'center'}}>
           <span className="mono" style={{fontSize:'.55rem',letterSpacing:'.14em',color:'var(--ink2)',textTransform:'uppercase'}}>Chennai · Open to Freelancing</span>
@@ -175,6 +177,15 @@ const Nav = ({ light, setLight }) => {
             <span className="mono" style={{fontSize:'.52rem',letterSpacing:'.15em',textTransform:'uppercase'}}>{light?'Dark':'Light'}</span>
           </motion.button>
         </div>
+      </div>
+      {/* Mobile top bar */}
+      <div className="mobile-bar" style={{display:'none',padding:'.5rem 1.2rem',justifyContent:'space-between',alignItems:'center',borderBottom:'1px solid var(--r)'}}>
+        <span className="mono" style={{fontSize:'.52rem',letterSpacing:'.12em',color:'var(--ink2)',textTransform:'uppercase'}}>Chennai · Freelancing</span>
+        <motion.button data-h whileTap={{scale:.9}} onClick={()=>setLight(l=>!l)}
+          style={{background:'none',border:'1px solid var(--r2)',borderRadius:3,padding:'.15rem .45rem',color:'var(--ink)',display:'flex',alignItems:'center',gap:'.25rem'}}>
+          {light?<IcMoon size={10}/>:<IcSun size={10}/>}
+          <span className="mono" style={{fontSize:'.5rem',letterSpacing:'.12em',textTransform:'uppercase'}}>{light?'Dark':'Light'}</span>
+        </motion.button>
       </div>
       <div className="nav-grid" style={{padding:'.8rem 2.5rem',display:'grid',gridTemplateColumns:'1fr auto 1fr',alignItems:'center',maxWidth:1280,margin:'0 auto'}}>
         <div className="nav-left" style={{display:'flex',gap:'2.5rem'}}>
@@ -271,7 +282,7 @@ const Hero = () => {
           </div>
 
           {/* Rotating badge */}
-          <motion.div initial={{opacity:0,scale:0}} animate={{opacity:1,scale:1}} transition={{delay:.9,type:'spring',stiffness:120}}
+          <motion.div className="badge-wrap" initial={{opacity:0,scale:0}} animate={{opacity:1,scale:1}} transition={{delay:.9,type:'spring',stiffness:120}}
             style={{position:'absolute',top:'8rem',right:'3rem',width:130,height:130,display:'flex',alignItems:'center',justifyContent:'center'}}>
             <svg width="130" height="130" viewBox="0 0 130 130" style={{animation:'spin 20s linear infinite',position:'absolute'}}>
               <defs><path id="cp" d="M 65,65 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0"/></defs>
