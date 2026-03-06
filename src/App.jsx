@@ -65,16 +65,21 @@ const G = () => (
       .mobile-bar{display:flex!important}
       .nav-grid{grid-template-columns:auto auto!important;justify-content:space-between;padding:.6rem 1.2rem!important}
       .nav-left,.nav-right{display:none!important}
-      .hero-grid{grid-template-columns:1fr!important;gap:2rem!important}
+      .hero-grid{grid-template-columns:1fr!important;gap:1.5rem!important}
+      .hero-right{border-left:none!important;padding-left:0!important}
       .stats-grid{grid-template-columns:1fr 1fr!important}
       .about-grid{grid-template-columns:1fr!important;gap:2rem!important}
       .skills-grid{grid-template-columns:1fr!important;gap:2rem!important}
+      .skills-tabs{overflow-x:auto!important;flex-wrap:nowrap!important}
+      .skills-tabs button{flex-shrink:0!important;font-size:.55rem!important;padding:.6rem .9rem!important}
+      .radar-wrap{display:none!important}
       .certs-grid{grid-template-columns:1fr!important}
       .contact-grid{grid-template-columns:1fr!important;gap:2rem!important}
       .contact-border{border-left:none!important;padding-left:0!important;border-top:1px solid var(--r2);padding-top:2rem!important}
       .footer-grid{grid-template-columns:1fr!important;gap:1rem!important;text-align:center;justify-items:center}
+      .footer-links{display:none!important}
       .badge-wrap{display:none!important}
-      section{padding:4rem 1.2rem!important}
+      section{padding:3.5rem 1.2rem!important;max-width:100%!important}
       .awards-row{grid-template-columns:2rem 2rem 1fr!important}
       .fact-grid{grid-template-columns:1fr 1fr!important}
     }
@@ -303,7 +308,7 @@ const Hero = () => {
           <p className="cg" style={{fontSize:'clamp(.95rem,1.5vw,1.25rem)',fontStyle:'italic',lineHeight:1.75,color:'var(--ink2)'}}>
             Kevin DS is a Chennai-based AI & Data Science engineer who believes the sharpest technical mind must also hold a designer's eye.
           </p>
-          <div style={{borderLeft:'1px solid var(--r2)',paddingLeft:'3rem'}}>
+          <div className="hero-right" style={{borderLeft:'1px solid var(--r2)',paddingLeft:'3rem'}}>
             <p style={{fontSize:'.86rem',lineHeight:1.9,color:'var(--mut)',marginBottom:'1.4rem'}}>
               Final year B.E. student at Panimalar Engineering College. Building at the intersection of machine intelligence, data systems, and interaction design.
             </p>
@@ -543,7 +548,7 @@ const Skills = () => {
   return (
     <section id="skills" style={{padding:'7rem 2.5rem',maxWidth:1280,margin:'0 auto'}}>
       <SH title="Skills &" italic="Expertise" meta={`Toolkit — ${SKILLS.reduce((a,s)=>a+s.skills.length,0)} Skills`}/>
-      <div style={{display:'flex',borderBottom:'1px solid var(--r2)',marginBottom:'3rem'}}>
+      <div className="skills-tabs" style={{display:'flex',borderBottom:'1px solid var(--r2)',marginBottom:'3rem'}}>
         {SKILLS.map((s,i)=>(
           <motion.button key={i} onClick={()=>setTab(i)} whileTap={{scale:.97}} data-h
             style={{fontFamily:"'DM Mono'",fontSize:'.6rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.7rem 1.4rem',cursor:'pointer',background:'none',border:'none',borderBottom:tab===i?`2px solid ${s.color}`:'2px solid transparent',color:tab===i?s.color:'var(--mut)',transition:'all .2s',marginBottom:'-1px'}}>
@@ -558,7 +563,7 @@ const Skills = () => {
             <div className="mono" style={{fontSize:'.54rem',letterSpacing:'.16em',textTransform:'uppercase',color:'var(--mut)',borderBottom:'1px solid var(--r)',paddingBottom:'.5rem',marginBottom:'1.4rem'}}>Proficiency Levels</div>
             {cur.skills.map((s,i)=><AnimBar key={s.name} s={s} color={cur.color} i={i}/>)}
           </div>
-          <div>
+          <div className="radar-wrap">
             <div className="mono" style={{fontSize:'.54rem',letterSpacing:'.16em',textTransform:'uppercase',color:'var(--mut)',borderBottom:'1px solid var(--r)',paddingBottom:'.5rem',marginBottom:'1.4rem'}}>Skill Radar</div>
             <div style={{display:'flex',justifyContent:'center',padding:'.5rem 0 1rem'}}>
               <Radar skills={cur.skills} color={cur.color}/>
