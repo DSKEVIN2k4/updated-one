@@ -62,14 +62,17 @@ const G = () => (
     @media(max-width:768px){
       body{cursor:auto}
       .hide-mobile{display:none!important}
-      .mobile-bar{display:flex!important}
-      .nav-grid{grid-template-columns:auto auto!important;justify-content:space-between;padding:.6rem 1.2rem!important}
+      .mobile-bar{display:none!important}
+      .nav-grid{display:flex!important;justify-content:space-between!important;align-items:center!important;padding:.8rem 1.2rem!important}
+      .nav-logo{font-size:1.5rem!important;text-align:left!important}
       .nav-left,.nav-right{display:none!important}
+      .nav-grid .nav-right-mobile{display:flex!important;justify-content:flex-end!important}
       .hero-grid{grid-template-columns:1fr!important;gap:1.5rem!important}
       .hero-right{border-left:none!important;padding-left:0!important}
       .stats-grid{grid-template-columns:1fr 1fr!important}
       .about-grid{grid-template-columns:1fr!important;gap:2rem!important}
       .skills-grid{grid-template-columns:1fr!important;gap:2rem!important}
+      .skills-bars{width:100%!important}
       .skills-tabs{overflow-x:auto!important;flex-wrap:nowrap!important}
       .skills-tabs button{flex-shrink:0!important;font-size:.55rem!important;padding:.6rem .9rem!important}
       .radar-wrap{display:none!important}
@@ -163,15 +166,22 @@ const Ticker = ({ items, speed=30, reverse=false, gold=false }) => {
 /* ── NAV ────────────────────────────────────────────────────────── */
 const Nav = ({ light, setLight }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', h);
     return () => window.removeEventListener('scroll', h);
   }, []);
-  const go = id => document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+  const go = id => {
+    setMenuOpen(false);
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+    }, 300);
+  };
+  const links = ['work','about','skills','awards','contact'];
   return (
     <motion.nav initial={{y:-80,opacity:0}} animate={{y:0,opacity:1}} transition={{delay:.1,duration:.7,ease:[.22,1,.36,1]}}
-      style={{position:'fixed',top:0,left:0,right:0,zIndex:1000,background:scrolled?'rgba(8,7,10,0.92)':'transparent',backdropFilter:scrolled?'blur(20px)':'none',borderBottom:scrolled?'1px solid var(--r2)':'1px solid transparent',transition:'all .4s'}}>
+      style={{position:'fixed',top:0,left:0,right:0,zIndex:1000,background:scrolled||menuOpen?'var(--bg)':'transparent',backdropFilter:scrolled||menuOpen?'blur(20px)':'none',borderBottom:scrolled?'1px solid var(--r2)':'1px solid transparent',transition:'all .4s'}}>
       <div className="hide-mobile" style={{borderBottom:'1px solid var(--r)',padding:'.35rem 2.5rem',display:'flex',justifyContent:'space-between',maxWidth:1280,margin:'0 auto'}}>
         <span className="mono" style={{fontSize:'.55rem',letterSpacing:'.2em',color:'var(--ink2)',textTransform:'uppercase'}}>Issue No. 01 · AI & DS Engineer · UI/UX Designer</span>
         <div style={{display:'flex',gap:'1.5rem',alignItems:'center'}}>
@@ -183,35 +193,63 @@ const Nav = ({ light, setLight }) => {
           </motion.button>
         </div>
       </div>
-      {/* Mobile top bar */}
-      <div className="mobile-bar" style={{display:'none',padding:'.5rem 1.2rem',justifyContent:'space-between',alignItems:'center',borderBottom:'1px solid var(--r)'}}>
-        <span className="mono" style={{fontSize:'.52rem',letterSpacing:'.12em',color:'var(--ink2)',textTransform:'uppercase'}}>Chennai · Freelancing</span>
-        <motion.button data-h whileTap={{scale:.9}} onClick={()=>setLight(l=>!l)}
-          style={{background:'none',border:'1px solid var(--r2)',borderRadius:3,padding:'.15rem .45rem',color:'var(--ink)',display:'flex',alignItems:'center',gap:'.25rem'}}>
-          {light?<IcMoon size={10}/>:<IcSun size={10}/>}
-          <span className="mono" style={{fontSize:'.5rem',letterSpacing:'.12em',textTransform:'uppercase'}}>{light?'Dark':'Light'}</span>
-        </motion.button>
-      </div>
-      <div className="nav-grid" style={{padding:'.8rem 2.5rem',display:'grid',gridTemplateColumns:'1fr auto 1fr',alignItems:'center',maxWidth:1280,margin:'0 auto'}}>
+      <div className="nav-grid" style={{padding:'.8rem 2.5rem',display:'grid',gridTemplateColumns:'1fr auto 1fr',alignItems:'center',maxWidth:1280,margin:'0 auto',position:'relative'}}>
         <div className="nav-left" style={{display:'flex',gap:'2.5rem'}}>
           {['work','about','skills'].map(n=>(
             <motion.span key={n} data-h onClick={()=>go(n)} whileHover={{color:'var(--a)'}}
-              style={{fontSize:'.75rem',fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--mut)',transition:'color .2s',cursor:'pointer'}}>{n}</motion.span>
+              style={{fontSize:'.88rem',fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--mut)',transition:'color .2s',cursor:'pointer'}}>{n}</motion.span>
           ))}
         </div>
-        <motion.span onClick={()=>go('home')} whileHover={{letterSpacing:'0.18em'}} data-h
-          style={{cursor:'pointer',fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:'2rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:'#e8c84a',transition:'letter-spacing 0.3s ease'}}>
+        <motion.span className="nav-logo" onClick={()=>go('home')} whileHover={{letterSpacing:'0.18em'}} data-h
+          style={{cursor:'pointer',fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:'2.4rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:'#e8c84a',transition:'letter-spacing 0.3s ease'}}>
           K<span style={{fontStyle:'italic'}}>D</span>S
         </motion.span>
         <div className="nav-right" style={{display:'flex',gap:'2.5rem',justifyContent:'flex-end'}}>
           {['awards','contact'].map(n=>(
             <motion.span key={n} data-h onClick={()=>go(n)} whileHover={{color:'var(--a)'}}
-              style={{fontSize:'.75rem',fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--mut)',transition:'color .2s',cursor:'pointer'}}>{n}</motion.span>
+              style={{fontSize:'.88rem',fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--mut)',transition:'color .2s',cursor:'pointer'}}>{n}</motion.span>
           ))}
           <motion.a href="https://github.com/DSKEVIN2k4" target="_blank" rel="noopener noreferrer" data-h whileHover={{color:'var(--a)'}}
-            style={{fontSize:'.75rem',fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--mut)',transition:'color .2s'}}>GitHub ↗</motion.a>
+            style={{fontSize:'.88rem',fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--mut)',transition:'color .2s'}}>GitHub ↗</motion.a>
         </div>
+        {/* Mobile hamburger */}
+        <motion.button className="nav-right-mobile" onClick={()=>setMenuOpen(o=>!o)}
+          style={{display:'none',background:'none',border:'none',color:'var(--ink)',cursor:'pointer',padding:'.2rem',justifyContent:'flex-end',flexDirection:'column',gap:'5px',alignItems:'flex-end'}}>
+          <motion.span animate={{width:menuOpen?'20px':'20px',rotate:menuOpen?45:0,y:menuOpen?7:0}} style={{display:'block',height:'2px',background:'var(--a)',width:'20px',transformOrigin:'center'}}/>
+          <motion.span animate={{opacity:menuOpen?0:1}} style={{display:'block',height:'2px',background:'var(--a)',width:'14px'}}/>
+          <motion.span animate={{width:'20px',rotate:menuOpen?-45:0,y:menuOpen?-7:0}} style={{display:'block',height:'2px',background:'var(--a)',width:'20px',transformOrigin:'center'}}/>
+        </motion.button>
       </div>
+      {/* Mobile dropdown menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div initial={{opacity:0,height:0}} animate={{opacity:1,height:'auto'}} exit={{opacity:0,height:0}}
+            style={{overflow:'hidden',borderTop:'1px solid var(--r2)',background:'var(--bg)',backdropFilter:'blur(20px)'}}>
+            {links.map((n,i)=>(
+              <motion.div key={n} initial={{opacity:0,x:-10}} animate={{opacity:1,x:0}} transition={{delay:i*.05}}
+                onClick={()=>go(n)}
+                style={{padding:'1rem 1.5rem',borderBottom:'1px solid var(--r)',cursor:'pointer',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                <span className="mono" style={{fontSize:'.75rem',letterSpacing:'.14em',textTransform:'uppercase',color:'var(--ink)'}}>{n}</span>
+                <span style={{color:'var(--a)'}}>→</span>
+              </motion.div>
+            ))}
+            <motion.div initial={{opacity:0,x:-10}} animate={{opacity:1,x:0}} transition={{delay:links.length*.05}}
+              onClick={()=>{window.open('https://github.com/DSKEVIN2k4','_blank');setMenuOpen(false);}}
+              style={{padding:'1rem 1.5rem',cursor:'pointer',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <span className="mono" style={{fontSize:'.75rem',letterSpacing:'.14em',textTransform:'uppercase',color:'var(--ink)'}}>GitHub</span>
+              <span style={{color:'var(--a)'}}>↗</span>
+            </motion.div>
+            <div style={{padding:'1rem 1.5rem',borderTop:'1px solid var(--r)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <span className="mono" style={{fontSize:'.65rem',letterSpacing:'.1em',color:'var(--mut)',textTransform:'uppercase'}}>Theme</span>
+              <motion.button whileTap={{scale:.9}} onClick={()=>setLight(l=>!l)}
+                style={{background:'none',border:'1px solid var(--r2)',borderRadius:3,padding:'.18rem .5rem',color:'var(--ink)',display:'flex',alignItems:'center',gap:'.3rem'}}>
+                {light?<IcMoon size={11}/>:<IcSun size={11}/>}
+                <span className="mono" style={{fontSize:'.5rem',letterSpacing:'.12em',textTransform:'uppercase'}}>{light?'Dark':'Light'}</span>
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };
@@ -558,7 +596,7 @@ const Skills = () => {
       </div>
       <AnimatePresence mode="wait">
         <motion.div key={tab} initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-12}} transition={{duration:.28}}
-          style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'5rem',alignItems:'start'}}>
+          className="skills-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'5rem',alignItems:'start'}}>
           <div>
             <div className="mono" style={{fontSize:'.54rem',letterSpacing:'.16em',textTransform:'uppercase',color:'var(--mut)',borderBottom:'1px solid var(--r)',paddingBottom:'.5rem',marginBottom:'1.4rem'}}>Proficiency Levels</div>
             {cur.skills.map((s,i)=><AnimBar key={s.name} s={s} color={cur.color} i={i}/>)}
