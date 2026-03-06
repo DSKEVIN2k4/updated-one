@@ -82,6 +82,7 @@ const G = () => (
       .footer-grid{grid-template-columns:1fr!important;gap:1rem!important;text-align:center;justify-items:center}
       .footer-links{display:none!important}
       .badge-wrap{display:none!important}
+      .hero-inner{padding:0 1rem!important}
       section{padding:3.5rem 1.2rem!important;max-width:100%!important}
       .awards-row{grid-template-columns:2rem 2rem 1fr!important}
       .fact-grid{grid-template-columns:1fr 1fr!important}
@@ -295,13 +296,13 @@ const Hero = () => {
       {/* Grid lines */}
       <div style={{position:'absolute',inset:0,pointerEvents:'none',backgroundImage:'linear-gradient(var(--r) 1px,transparent 1px),linear-gradient(90deg,var(--r) 1px,transparent 1px)',backgroundSize:'70px 70px',maskImage:'radial-gradient(ellipse 70% 50% at 50% 50%,black,transparent)'}}/>
 
-      <div style={{maxWidth:1280,margin:'0 auto',padding:'0 2.5rem',position:'relative',zIndex:1}}>
+      <div className="hero-inner" style={{maxWidth:1280,margin:'0 auto',padding:'0 2.5rem',position:'relative',zIndex:1}}>
 
         {/* Kicker */}
         <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.2,duration:.7}}
           style={{display:'flex',alignItems:'center',gap:'1rem',marginBottom:'2rem',borderTop:'2px solid var(--r2)',paddingTop:'1rem',flexWrap:'nowrap',overflow:'hidden'}}>
           <span style={{background:'var(--a)',color:'#000',fontFamily:"'DM Mono'",fontSize:'.56rem',letterSpacing:'.2em',padding:'.2rem .7rem',textTransform:'uppercase',fontWeight:600,flexShrink:0}}>✦ Featured</span>
-          <span className="mono" style={{fontSize:'.56rem',letterSpacing:'.12em',color:'var(--mut)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',display:'flex',alignItems:'center',gap:'.3rem'}}>
+          <span className="mono" style={{fontSize:'.56rem',letterSpacing:'.12em',color:'var(--mut)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',display:'flex',alignItems:'center',gap:'.3rem',flex:1}}>
             Specialising in —{' '}
             <AnimatePresence mode="wait">
               <motion.span key={roleIdx} initial={{y:12,opacity:0}} animate={{y:0,opacity:1}} exit={{y:-12,opacity:0}} transition={{duration:.35}}
