@@ -929,10 +929,10 @@ const Loader = ({ onDone }) => {
 
   useEffect(() => {
     const steps = [
-      {target:30, delay:60},
-      {target:65, delay:40},
-      {target:85, delay:30},
-      {target:100, delay:20},
+      {target:40, delay:20},
+      {target:75, delay:15},
+      {target:95, delay:10},
+      {target:100, delay:8},
     ];
     let current = 0;
     let stepIdx = 0;
@@ -946,7 +946,7 @@ const Loader = ({ onDone }) => {
         stepIdx++;
         if (current >= 100) {
           setPhase(1);
-          setTimeout(() => { setPhase(2); setTimeout(onDone, 600); }, 600);
+          setTimeout(() => { setPhase(2); setTimeout(onDone, 400); }, 400);
           return;
         }
       }
