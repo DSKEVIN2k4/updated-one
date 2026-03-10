@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, useScroll } from "framer-motion";
 
 /* ── ICONS ─────────────────────────────────────────────────────── */
@@ -62,7 +62,11 @@ const G = () => (
     @media(max-width:768px){
       body{cursor:auto}
       .hide-mobile{display:none!important}
-      .mobile-bar{display:none!important}
+      .projects-mobile{display:none!important}
+      @media(max-width:768px){
+        .projects-desktop{display:none!important}
+        .projects-mobile{display:flex!important}
+      }
       .nav-grid{display:flex!important;justify-content:space-between!important;align-items:center!important;padding:.8rem 1.2rem!important}
       .nav-logo{font-size:1.5rem!important;text-align:left!important}
       .nav-left,.nav-right{display:none!important}
@@ -82,6 +86,8 @@ const G = () => (
       .footer-grid{grid-template-columns:1fr!important;gap:1rem!important;text-align:center;justify-items:center}
       .footer-links{display:none!important}
       .badge-wrap{display:none!important}
+      .projects-mobile{display:flex!important}
+      .projects-desktop{display:none!important}
       .hero-inner{padding:0 1rem!important}
       section{padding:3.5rem 1.2rem!important;max-width:100%!important}
       .awards-row{grid-template-columns:2rem 2rem 1fr!important}
@@ -90,7 +96,65 @@ const G = () => (
   `}</style>
 );
 
-/* ── CURSOR ─────────────────────────────────────────────────────── */
+/* ── SCROLL PROGRESS BAR ────────────────────────────────────────── */
+const ScrollBar = () => {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+  return (
+    <motion.div style={{
+      position:'fixed',top:0,left:0,right:0,height:'3px',
+      background:'linear-gradient(90deg,#e8c84a,#f59e0b,#d4a017)',
+      scaleX, transformOrigin:'0%', zIndex:9998,
+      boxShadow:'0 0 12px rgba(232,200,74,0.8), 0 0 4px rgba(232,200,74,1)'
+    }}/>
+  );
+};
+
+/* ── TEXT SCRAMBLE HOOK ─────────────────────────────────────────── */
+const useScramble = (text, trigger) => {
+  const [display, setDisplay] = useState(text);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%&';
+  useEffect(() => {
+    if (!trigger) return;
+    let iteration = 0;
+    const interval = setInterval(() => {
+      setDisplay(text.split('').map((c, i) => {
+        if (c === ' ') return ' ';
+        if (i < iteration) return text[i];
+        return chars[Math.floor(Math.random() * chars.length)];
+      }).join(''));
+      iteration += 0.5;
+      if (iteration >= text.length) clearInterval(interval);
+    }, 40);
+    return () => clearInterval(interval);
+  }, [trigger, text]);
+  return display;
+};
+
+/* ── MAGNETIC BUTTON ────────────────────────────────────────────── */
+const MagButton = ({ children, onClick, style, className, href, target }) => {
+  const ref = useRef(null);
+  const x = useMotionValue(0), y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 200, damping: 15 });
+  const sy = useSpring(y, { stiffness: 200, damping: 15 });
+  const onMove = e => {
+    const r = ref.current.getBoundingClientRect();
+    x.set((e.clientX - r.left - r.width/2) * 0.35);
+    y.set((e.clientY - r.top - r.height/2) * 0.35);
+  };
+  const onLeave = () => { x.set(0); y.set(0); };
+  const Tag = href ? motion.a : motion.button;
+  return (
+    <Tag ref={ref} href={href} target={target} onClick={onClick}
+      onMouseMove={onMove} onMouseLeave={onLeave}
+      style={{...style, x: sx, y: sy, display:'inline-block'}}
+      className={className} whileTap={{scale:.95}}>
+      {children}
+    </Tag>
+  );
+};
+
+
 const Cursor = () => {
   const mx = useMotionValue(-100), my = useMotionValue(-100);
   const sx = useSpring(mx, {stiffness:500,damping:40});
@@ -266,6 +330,13 @@ const Hero = () => {
   const rotY = useTransform(mx,[0,1],[-6,6]);
   const [roleIdx, setRoleIdx] = useState(0);
   const [showGlitch, setShowGlitch] = useState(false);
+  const [scrambled, setScrambled] = useState(false);
+  const line1 = useScramble('THE HYBRID', scrambled);
+  const line2 = useScramble('ENGINEER', scrambled);
+
+  useEffect(() => {
+    setTimeout(() => setScrambled(true), 800);
+  }, []);
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -317,11 +388,11 @@ const Hero = () => {
           <div style={{position:'relative',display:'inline-block'}}>
             <h1 className="cg glitch-wrap" data-text="THE HYBRID"
               style={{fontSize:'clamp(4.5rem,13vw,11rem)',fontWeight:700,letterSpacing:'-.03em',lineHeight:.88,color:'var(--ink)',display:'block'}}>
-              THE HYBRID
+              {line1}
             </h1>
             <h1 className="cg shimmer-text"
               style={{fontSize:'clamp(4.5rem,13vw,11rem)',fontWeight:300,fontStyle:'italic',letterSpacing:'-.03em',lineHeight:.88,display:'block',marginTop:'.1em'}}>
-              ENGINEER
+              {line2}
             </h1>
           </div>
 
@@ -352,15 +423,18 @@ const Hero = () => {
               Final year B.E. student at Panimalar Engineering College. Building at the intersection of machine intelligence, data systems, and interaction design.
             </p>
             <div style={{display:'flex',gap:'1rem',flexWrap:'wrap'}}>
-              <motion.button data-h whileTap={{scale:.96}} whileHover={{scale:1.02}}
-                onClick={() => document.getElementById('work')?.scrollIntoView({behavior:'smooth'})}
-                style={{background:'linear-gradient(135deg,var(--a),var(--a2))',color:'#fff',border:'none',padding:'.72rem 1.8rem',fontFamily:"'Space Grotesk'",fontWeight:700,fontSize:'.75rem',letterSpacing:'.08em',textTransform:'uppercase',display:'flex',alignItems:'center',gap:'.5rem',cursor:'pointer'}}>
+              <MagButton data-h onClick={() => document.getElementById('work')?.scrollIntoView({behavior:'smooth'})}
+                style={{background:'linear-gradient(135deg,var(--a),var(--a2))',color:'#000',border:'none',padding:'.72rem 1.8rem',fontFamily:"'Space Grotesk'",fontWeight:700,fontSize:'.75rem',letterSpacing:'.08em',textTransform:'uppercase',display:'flex',alignItems:'center',gap:'.5rem',cursor:'pointer'}}>
                 View Work <IcArrow size={13}/>
-              </motion.button>
-              <motion.a href="https://linkedin.com/in/kends2k4" target="_blank" rel="noopener noreferrer" data-h whileHover={{borderColor:'var(--a)',color:'var(--a)'}}
-                style={{border:'1px solid var(--r2)',color:'var(--ink2)',padding:'.72rem 1.4rem',fontFamily:"'Space Grotesk'",fontWeight:500,fontSize:'.75rem',letterSpacing:'.08em',textTransform:'uppercase',display:'flex',alignItems:'center',gap:'.45rem',transition:'all .25s',cursor:'pointer'}}>
+              </MagButton>
+              <MagButton href="https://linkedin.com/in/kends2k4" target="_blank"
+                style={{border:'1px solid var(--r2)',color:'var(--ink2)',padding:'.72rem 1.4rem',fontFamily:"'Space Grotesk'",fontWeight:500,fontSize:'.75rem',letterSpacing:'.08em',textTransform:'uppercase',display:'flex',alignItems:'center',gap:'.45rem',background:'none',cursor:'pointer'}}>
                 LinkedIn <IcUpRight size={12}/>
-              </motion.a>
+              </MagButton>
+              <MagButton href="https://raw.githubusercontent.com/DSKEVIN2k4/updated-one/main/RESUME_KEVINDS_v2_0.pdf" target="_blank"
+                style={{border:'1px solid var(--a)',color:'var(--a)',padding:'.72rem 1.4rem',fontFamily:"'Space Grotesk'",fontWeight:500,fontSize:'.75rem',letterSpacing:'.08em',textTransform:'uppercase',display:'flex',alignItems:'center',gap:'.45rem',background:'none',cursor:'pointer'}}>
+                Resume ↓
+              </MagButton>
             </div>
           </div>
         </motion.div>
@@ -395,10 +469,10 @@ const PROJECTS = [
   {num:'04',title:'Aquasense IoT',cat:'IoT · Hardware',year:'2023',accent:'#f59e0b',desc:'Arduino-based IoT environmental monitoring system for real-time water quality tracking using integrated sensor arrays, developed over a 16-week AICTE internship.',tech:['Arduino','IoT','Sensor Networks','Embedded Systems'],url:'https://github.com/DSKEVIN2k4'},
 ];
 const UI_PROJECTS = [
-  {num:'05',title:'KENHED PROSER',cat:'Brand System',accent:'#e05030',concept:'Industrial Nostalgia',desc:'Brutalist high-impact brand environment. Structural typography + retro interfaces with grain-textured backgrounds.',details:['Chromatic Logic — five identities dictate the entire UI palette','Identities: LATTE · THE BARBIE · MS. FERRARI · QUEEN BEE · LIMONADE']},
-  {num:'06',title:'Portfolio v2.0',cat:'Interaction Design',accent:'#d4a017',concept:'Story-First Design',desc:'Desktop-style immersive experience. Fully connected animated flows with every wire in Figma connected with specific intent.',details:['Desktop-style UI with seamless transitions','Story-First — journey over pixels']},
-  {num:'07',title:'Exchange Ease UI',cat:'UX Redesign',accent:'#e8c84a',concept:'Trust-Based UX',desc:'Redesigning a developer-built barter marketplace into a trust-based user experience powered by NLP-driven recommendations.',details:['Raw data management → intuitive secure book bartering','NLP recommendations + trust architecture at core']},
-  {num:'08',title:'KENNIE SKATES',cat:'E-Commerce',accent:'#e8c84a',concept:'Gritty enough to endure.',desc:'Multi-page checkout flow blending high-end fashion with raw street culture and skateboard DNA for a Chennai entrepreneur.',details:['Auto Layout component architecture for scale','Framer interactive Stacks — beyond static mockups']},
+  {num:'01',title:'KENHED PROSER',cat:'Brand System',accent:'#e05030',concept:'Industrial Nostalgia',desc:'Brutalist high-impact brand environment. Structural typography + retro interfaces with grain-textured backgrounds.',details:['Chromatic Logic — five identities dictate the entire UI palette','Identities: LATTE · THE BARBIE · MS. FERRARI · QUEEN BEE · LIMONADE']},
+  {num:'02',title:'Portfolio v2.0',cat:'Interaction Design',accent:'#d4a017',concept:'Story-First Design',desc:'Desktop-style immersive experience. Fully connected animated flows with every wire in Figma connected with specific intent.',details:['Desktop-style UI with seamless transitions','Story-First — journey over pixels']},
+  {num:'03',title:'Exchange Ease UI',cat:'UX Redesign',accent:'#e8c84a',concept:'Trust-Based UX',desc:'Redesigning a developer-built barter marketplace into a trust-based user experience powered by NLP-driven recommendations.',details:['Raw data management → intuitive secure book bartering','NLP recommendations + trust architecture at core']},
+  {num:'04',title:'KENNIE SKATES',cat:'E-Commerce',accent:'#e8c84a',concept:'Gritty enough to endure.',desc:'Multi-page checkout flow blending high-end fashion with raw street culture and skateboard DNA for a Chennai entrepreneur.',details:['Auto Layout component architecture for scale','Framer interactive Stacks — beyond static mockups']},
 ];
 
 const PCard = ({ p, i }) => {
@@ -467,10 +541,29 @@ const SH = ({ title, italic, meta }) => (
 const Projects = () => (
   <section id="work" style={{padding:'7rem 2.5rem',maxWidth:1280,margin:'0 auto'}}>
     <SH title="Selected" italic="Work" meta={`Engineering — ${PROJECTS.length} Projects`}/>
-    {PROJECTS.map((p,i) => <PCard key={p.num} p={p} i={i}/>)}
+    {/* Desktop: normal stack, Mobile: horizontal scroll */}
+    <div className="projects-desktop">
+      {PROJECTS.map((p,i) => <PCard key={p.num} p={p} i={i}/>)}
+    </div>
+    <div className="projects-mobile" style={{display:'none',overflowX:'auto',gap:'1rem',paddingBottom:'1rem',scrollSnapType:'x mandatory',WebkitOverflowScrolling:'touch'}}>
+      {PROJECTS.map((p,i) => (
+        <div key={p.num} style={{minWidth:'85vw',scrollSnapAlign:'start'}}>
+          <PCard p={p} i={i}/>
+        </div>
+      ))}
+    </div>
     <div style={{marginTop:'6rem'}}>
       <SH title="Design" italic="Portfolio" meta={`UI/UX — ${UI_PROJECTS.length} Projects`}/>
-      {UI_PROJECTS.map((p,i) => <PCard key={p.num} p={p} i={i}/>)}
+      <div className="projects-desktop">
+        {UI_PROJECTS.map((p,i) => <PCard key={p.num} p={p} i={i}/>)}
+      </div>
+      <div className="projects-mobile" style={{display:'none',overflowX:'auto',gap:'1rem',paddingBottom:'1rem',scrollSnapType:'x mandatory',WebkitOverflowScrolling:'touch'}}>
+        {UI_PROJECTS.map((p,i) => (
+          <div key={p.num} style={{minWidth:'85vw',scrollSnapAlign:'start'}}>
+            <PCard p={p} i={i}/>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 );
@@ -829,12 +922,82 @@ const Footer = () => (
   </footer>
 );
 
+/* ── LOADER ─────────────────────────────────────────────────────── */
+const Loader = ({ onDone }) => {
+  const [progress, setProgress] = useState(0);
+  const [phase, setPhase] = useState(0); // 0=counting, 1=done, 2=exit
+
+  useEffect(() => {
+    const steps = [
+      {target:30, delay:60},
+      {target:65, delay:40},
+      {target:85, delay:30},
+      {target:100, delay:20},
+    ];
+    let current = 0;
+    let stepIdx = 0;
+
+    const tick = () => {
+      const step = steps[stepIdx];
+      if (!step) return;
+      current += 1;
+      setProgress(current);
+      if (current >= step.target) {
+        stepIdx++;
+        if (current >= 100) {
+          setPhase(1);
+          setTimeout(() => { setPhase(2); setTimeout(onDone, 600); }, 600);
+          return;
+        }
+      }
+      setTimeout(tick, steps[stepIdx]?.delay || 20);
+    };
+    setTimeout(tick, 200);
+  }, []);
+
+  return (
+    <motion.div animate={{opacity: phase===2?0:1}} transition={{duration:.5}}
+      style={{position:'fixed',inset:0,zIndex:9999,background:'#08070a',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'2rem'}}>
+
+      {/* PORTFOLIO + KEVIN D S stacked and centered */}
+      <div style={{position:'relative',display:'flex',alignItems:'center',justifyContent:'center'}}>
+        <span style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:'clamp(3rem,18vw,10rem)',fontWeight:700,letterSpacing:'0.08em',color:'rgba(232,200,74,0.04)',textTransform:'uppercase',userSelect:'none',lineHeight:1}}>PORTFOLIO</span>
+        <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:.6}}
+          style={{position:'absolute',textAlign:'center',whiteSpace:'nowrap'}}>
+          <span style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:'clamp(2rem,8vw,4rem)',fontWeight:700,letterSpacing:'0.2em',color:'#e8c84a'}}>
+            KEVIN <span style={{fontStyle:'italic'}}>D</span> S
+          </span>
+        </motion.div>
+      </div>
+
+      {/* Progress bar */}
+      <div style={{width:'clamp(160px,40vw,280px)',height:'1px',background:'rgba(232,200,74,0.15)',position:'relative',overflow:'hidden'}}>
+        <motion.div style={{position:'absolute',left:0,top:0,height:'100%',background:'linear-gradient(90deg,var(--a,#e8c84a),#f59e0b)',width:`${progress}%`,transition:'width .1s linear'}}/>
+      </div>
+
+      {/* Counter */}
+      <motion.span initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.3}}
+        className="mono" style={{fontSize:'.6rem',letterSpacing:'.3em',color:'rgba(232,200,74,0.5)',fontFamily:"'DM Mono',monospace"}}>
+        {String(progress).padStart(3,'0')} %
+      </motion.span>
+
+      {/* Label */}
+      <motion.span initial={{opacity:0}} animate={{opacity: phase===1?1:0.4}} transition={{duration:.4}}
+        className="mono" style={{fontSize:'.52rem',letterSpacing:'.2em',textTransform:'uppercase',color:'rgba(240,236,224,0.3)',fontFamily:"'DM Mono',monospace",position:'absolute',bottom:'2.5rem'}}>
+        {phase===1 ? '✦  Welcome' : 'Loading Portfolio'}
+      </motion.span>
+    </motion.div>
+  );
+};
+
 /* ── APP ────────────────────────────────────────────────────────── */
 export default function App() {
   const [light, setLight] = useTheme();
+  const [loaded, setLoaded] = useState(false);
   return (
     <div className="noise">
-      
+      <AnimatePresence>{!loaded && <Loader onDone={()=>setLoaded(true)}/>}</AnimatePresence>
+      <ScrollBar/>
       <G/>
       <Cursor/>
       <Particles/>
@@ -850,3 +1013,4 @@ export default function App() {
     </div>
   );
 }
+
