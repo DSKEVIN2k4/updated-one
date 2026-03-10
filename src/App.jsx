@@ -431,7 +431,7 @@ const Hero = () => {
                 style={{border:'1px solid var(--r2)',color:'var(--ink2)',padding:'.72rem 1.4rem',fontFamily:"'Space Grotesk'",fontWeight:500,fontSize:'.75rem',letterSpacing:'.08em',textTransform:'uppercase',display:'flex',alignItems:'center',gap:'.45rem',background:'none',cursor:'pointer'}}>
                 LinkedIn <IcUpRight size={12}/>
               </MagButton>
-              <MagButton href="https://raw.githubusercontent.com/DSKEVIN2k4/updated-one/main/RESUME_KEVINDS_v2_0.pdf" target="_blank"
+              <MagButton href="https://drive.google.com/uc?export=download&id=11d62I1r7TfP4TX1plFkO7FU_oAhP7VCs" target="_blank"
                 style={{border:'1px solid var(--a)',color:'var(--a)',padding:'.72rem 1.4rem',fontFamily:"'Space Grotesk'",fontWeight:500,fontSize:'.75rem',letterSpacing:'.08em',textTransform:'uppercase',display:'flex',alignItems:'center',gap:'.45rem',background:'none',cursor:'pointer'}}>
                 Resume ↓
               </MagButton>
@@ -1013,4 +1013,3 @@ export default function App() {
     </div>
   );
 }
-
