@@ -465,14 +465,15 @@ const Hero = () => {
 const PROJECTS = [
   {num:'01',title:'Song Suggesting AI',cat:'Computer Vision',year:'2023',accent:'#e8c84a',desc:'Emotion-aware music recommendation using facial recognition to detect real-time emotional expressions and suggest matching tracks. Presented at PECTEAM 2023.',tech:['Python','OpenCV','TensorFlow','Neural Networks'],url:'https://github.com/DSKEVIN2k4'},
   {num:'02',title:'Exchange Ease',cat:'NLP · Web',year:'2024',accent:'#d4a017',desc:'Trust-based digital book exchange platform leveraging NLP-driven recommendations for sustainable resource sharing. Research paper at IConIC 2025.',tech:['Python','NLP','Web Dev','Data Science'],url:'https://github.com/DSKEVIN2k4/Exchange-Ease---Book-Swap-Platform'},
-  {num:'03',title:'CLV Prediction',cat:'Data Science',year:'2024',accent:'#e05030',desc:'E-commerce predictive analytics using BG/NBD and Gamma-Gamma models to forecast customer lifetime value and optimise retention strategies.',tech:['Machine Learning','Statistical Modeling','BG/NBD','Data Analysis'],url:'https://github.com/DSKEVIN2k4/Customer-Lifetime-Value-Prediction-in-E-Commerce-Website'},
+  {num:'03',title:'PREDIKTA',cat:'Data Science',year:'2024',accent:'#e05030',desc:'E-commerce predictive analytics using BG/NBD and Gamma-Gamma models to forecast customer lifetime value and optimise retention strategies.',tech:['Machine Learning','Statistical Modeling','BG/NBD','Data Analysis'],url:'https://claude.ai/public/artifacts/e8a14b1a-632f-4397-9c4e-4e4377823d78'},
   {num:'04',title:'Aquasense IoT',cat:'IoT · Hardware',year:'2023',accent:'#f59e0b',desc:'Arduino-based IoT environmental monitoring system for real-time water quality tracking using integrated sensor arrays, developed over a 16-week AICTE internship.',tech:['Arduino','IoT','Sensor Networks','Embedded Systems'],url:'https://github.com/DSKEVIN2k4'},
 ];
 const UI_PROJECTS = [
   {num:'01',title:'KENHED PROSER',cat:'Brand System',accent:'#e05030',concept:'Industrial Nostalgia',desc:'Brutalist high-impact brand environment. Structural typography + retro interfaces with grain-textured backgrounds.',details:['Chromatic Logic — five identities dictate the entire UI palette','Identities: LATTE · THE BARBIE · MS. FERRARI · QUEEN BEE · LIMONADE']},
   {num:'02',title:'Portfolio v2.0',cat:'Interaction Design',accent:'#d4a017',concept:'Story-First Design',desc:'Desktop-style immersive experience. Fully connected animated flows with every wire in Figma connected with specific intent.',details:['Desktop-style UI with seamless transitions','Story-First — journey over pixels']},
-  {num:'03',title:'Exchange Ease UI',cat:'UX Redesign',accent:'#e8c84a',concept:'Trust-Based UX',desc:'Redesigning a developer-built barter marketplace into a trust-based user experience powered by NLP-driven recommendations.',details:['Raw data management → intuitive secure book bartering','NLP recommendations + trust architecture at core']},
+  {num:'03',title:'Exchange Ease UI',cat:'UX Redesign',accent:'#e8c84a',concept:'Trust-Based UX',url:'https://dskevin2k4.github.io/exchange-ease/',desc:'Redesigning a developer-built barter marketplace into a trust-based user experience powered by NLP-driven recommendations.',details:['Raw data management → intuitive secure book bartering','NLP recommendations + trust architecture at core']},
   {num:'04',title:'KENNIE SKATES',cat:'E-Commerce',accent:'#e8c84a',concept:'Gritty enough to endure.',desc:'Multi-page checkout flow blending high-end fashion with raw street culture and skateboard DNA for a Chennai entrepreneur.',details:['Auto Layout component architecture for scale','Framer interactive Stacks — beyond static mockups']},
+  {num:'05',title:'Raylyps',cat:'Brand · Digital Product',accent:'#e05030',concept:'Bold. Clean. Iconic.',desc:'A design-driven lipstick brand identity and digital product. Clean, modern, and user-friendly brand experience combining UI/UX design with frontend development. Showcases skills in design systems, responsive interfaces, and interactive user flows using Figma, React, and modern web technologies.',details:['Lipstick brand identity — bold visuals meet clean UX','Design systems + responsive interfaces at core']},
 ];
 
 const PCard = ({ p, i }) => {
@@ -624,7 +625,7 @@ const About = () => {
 const SKILLS = [
   {cat:'Design & UI/UX',icon:'🎨',color:'#e8c84a',skills:[{name:'Figma',l:100},{name:'Framer',l:85},{name:'Adobe Illustrator',l:82},{name:'Photoshop',l:80},{name:'Typography',l:88},{name:'User Research',l:80},{name:'Wireframing',l:85},{name:'Responsive Design',l:85}]},
   {cat:'Technical & Data',icon:'⚙️',color:'#f59e0b',skills:[{name:'Python',l:82},{name:'TensorFlow',l:76},{name:'SQL / MySQL',l:78},{name:'Java',l:74},{name:'Tableau',l:74},{name:'NLP',l:78}]},
-  {cat:'Web & Platforms',icon:'🌐',color:'#d4a017',skills:[{name:'HTML5 / CSS3',l:84},{name:'JavaScript',l:75},{name:'Wix Studio',l:88},{name:'WordPress',l:80},{name:'Vercel',l:78},{name:'React',l:70}]},
+  {cat:'Web & Platforms',icon:'🌐',color:'#d4a017',skills:[{name:'HTML5 / CSS3',l:84},{name:'JavaScript',l:75},{name:'React',l:70},{name:'Tailwind CSS',l:72},{name:'Node.js',l:68},{name:'Express.js',l:65},{name:'MongoDB',l:65},{name:'GitHub',l:85},{name:'VS Code',l:90},{name:'Vercel',l:78},{name:'Wix Studio',l:88}]},
 ];
 
 const AnimBar = ({s,color,i}) => {
